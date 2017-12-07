@@ -1,0 +1,3 @@
+MODULE kostka
+	SUBMODULE disp
+		INSTANCE XLXI_1
