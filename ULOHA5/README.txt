@@ -1,1 +1,0 @@
-For KOSTKA2, there are available 2 versions of counter.vhd (named counterA and counterB), both are working fine, select one and place it as counter.vhd in KOSTKA2 folder.

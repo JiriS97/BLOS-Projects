@@ -2,9 +2,9 @@
 -- Company: 
 -- Engineer: Jiri Sramek
 -- 
--- Create Date:    10:09:23 11/21/2017 
+-- Create Date:    11:59:48 12/06/2017 
 -- Design Name: 
--- Module Name:    counter - Behavioral 
+-- Module Name:    CounterUpDown - Behavioral 
 -- Project Name: 
 -- Target Devices: 
 -- Tool versions: 
@@ -20,6 +20,8 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
+use IEEE.STD_LOGIC_UNSIGNED.ALL; -- jinak nejde pricitat k vektorum
+
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
 --use IEEE.NUMERIC_STD.ALL;
@@ -29,29 +31,29 @@ use IEEE.STD_LOGIC_1164.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity counter is
-	Port( clk : in STD_LOGIC;
-			clr : in STD_LOGIC;
-			ce	 : in STD_LOGIC;
-			q : inout STD_LOGIC_VECTOR(2 downto 0));
-end counter;
+entity CounterUpDown is
+	Port(clk 			: in STD_LOGIC;
+		  ce 				: in STD_LOGIC;
+		  q				: out STD_LOGIC_VECTOR (3 downto 0));
+end CounterUpDown;
 
-architecture Behavioral of counter is
-	signal d : STD_LOGIC_VECTOR(2 downto 0); --vnitrni signal pro buzeni sekvencni casti
+architecture Behavioral of CounterUpDown is
+	signal dint			: STD_LOGIC_VECTOR (3 downto 0) :="0000";
+	signal countingUp : STD_LOGIC :='1';
 begin
-	-- prirazeni
-	q <= d;
-				
-	-- sekvencni cast
-	process(clk, clr)
+	q <= dint;
+		
+	process(clk)
 	begin
-		if(clr='1') then
-			d <= "000";
-		elsif(clk'event and clk='1') then
-			if(ce='1') then -- kombinacni logiku resim tady v procesu
-				d(1) <= d(0);
-				d(2) <= d(1);
-				d(0) <= NOT d(2);
+		if(clk'event and clk='1') then
+			if(ce='1') then
+				if(countingUp='1') then
+					dint <= dint + 1;
+					if(dint=14) then countingUp<='0'; end if;
+				else
+					dint <= dint - 1;
+					if(dint=1) then countingUp<='1'; end if;
+				end if;
 			end if;
 		end if;
 	end process;
